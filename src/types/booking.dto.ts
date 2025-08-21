@@ -1,18 +1,17 @@
 import z from "zod";
 import { BookingStatus } from "../../generated/prisma";
-import { CreateBookingSchema } from "./booking.schema";
+import { CreateBookingSchema, UpdateBookingSchema } from "./booking.schema";
 
 // Request DTOs
 export type CreateBookingRequest = z.infer<typeof CreateBookingSchema>;
+export type UpdateBookingRequest = z.infer<typeof UpdateBookingSchema>;
 
 export interface CreateBookingService extends CreateBookingRequest {
-    userId: number;
+  userId: number;
 }
-
-export interface UpdateBookingDto {
-  startTime?: Date | string;
-  endTime?: Date | string;
-  notes?: string;
+export interface UpdateBookingService extends UpdateBookingRequest {
+  id: number;
+  userId: number;
 }
 
 // Response DTO
@@ -26,4 +25,5 @@ export interface BookingResponseDto {
   notes?: string;
   createdAt: Date;
   updatedAt: Date;
+  isDeleted: boolean;
 }

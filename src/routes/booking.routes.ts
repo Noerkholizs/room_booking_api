@@ -2,7 +2,7 @@ import { Router } from "express";
 import { checkAuth, requireRole } from "@/middleware/auth.middleware";
 import { bookingController } from "@/controllers/booking.controller";
 import { validateRequest } from "@/utils/vadalidation";
-import { CreateBookingSchema } from "@/types/booking.schema";
+import { BookingParamsSchema, CreateBookingSchema, UpdateBookingSchema } from "@/types/booking.schema";
 
 const router = Router();
 
@@ -10,7 +10,26 @@ router.post("/",
     checkAuth, 
     requireRole("USER"), 
     validateRequest({body: CreateBookingSchema}), 
-    bookingController.createBooking
+    bookingController.create
+);
+
+router.put("/update/:bookingId", 
+    checkAuth, 
+    requireRole("USER"), 
+    validateRequest({
+        body: UpdateBookingSchema, 
+        params: BookingParamsSchema
+    }), 
+    bookingController.update
+);
+
+router.delete("/delete/:bookingId", 
+    checkAuth, 
+    requireRole("USER"), 
+    validateRequest({
+        params: BookingParamsSchema
+    }), 
+    bookingController.delete
 );
 
 export default router;

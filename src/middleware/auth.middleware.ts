@@ -59,8 +59,6 @@ export const checkAuth = (req: Request, res: Response, next: NextFunction) => {
 export const requireRole = (allowedRoles: Role | Role[]) => {
     const roles = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
 
-    console.log("ROLE ===> ", allowedRoles)
-
     return (req: Request, res: Response, next: NextFunction) => {
         if (!req.user) {
             responses.unauthorized(res, "Authentication Required");

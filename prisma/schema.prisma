@@ -48,6 +48,7 @@ model Booking {
   updatedAt DateTime      @updatedAt
   userId    Int
   roomId    Int
+  isDeleted Boolean       @default(false)
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
   @@map("bookings")

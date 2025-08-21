@@ -106,6 +106,9 @@ export const responses = {
   created: <T>(res: Response, data?: T, message: string = 'Resource created successfully') =>
     successResponse(res, HTTP_STATUS.CREATED, message, data),
   
+  updated: <T>(res: Response, data?: T, message: string = 'Resource updated successfully') =>
+    successResponse(res, HTTP_STATUS.CREATED, message, data),
+  
   noContent: (res: Response, message: string = 'No content') =>
     successResponse(res, HTTP_STATUS.NO_CONTENT, message),
 
