@@ -1,13 +1,11 @@
 import { authController } from "@/controllers/auth.controller";
+import { LoginSchema } from "@/types/auth.schema";
+import { validateRequest } from "@/utils/vadalidation";
 import { Router } from "express";
 
 const router = Router();
 
-console.log("AuthController =>", authController);
-
 router.post("/register", authController.register);
-router.post("/login", authController.login);
-// router.post("/logout");
-
+router.post("/login", validateRequest({ body: LoginSchema}), authController.login);
 
 export default router;

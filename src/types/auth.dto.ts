@@ -1,6 +1,11 @@
+import z from "zod";
 import { Role } from "../../generated/prisma";
+import { LoginSchema } from "./auth.schema";
 
-// Request DTOs
+
+
+export type LoginRequest = z.infer<typeof LoginSchema>;
+
 export interface RegisterDto {
   name: string;
   email: string;
@@ -8,16 +13,10 @@ export interface RegisterDto {
   role: Role
 }
 
-export interface LoginDto {
-  email: string;
-  password: string;
-}
-
 // Response DTO
-export interface AuthResponseDto {
+export interface AuthResponseDTO {
   token: string;
   user: {
-    id: number;
     name: string;
     email: string;
     role: Role;

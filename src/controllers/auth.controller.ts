@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { authService } from "@/services/auth.service";
-import { errorResponse, successResponse } from "@/response";
+import { errorResponse, responses, successResponse } from "@/response";
 import { RegisterDto } from "@/types/auth.dto";
+import { handleControllerError } from "@/errors";
 
 export const authController = {
   register: async (req: Request, res: Response): Promise<void> => {
@@ -10,6 +11,7 @@ export const authController = {
       const user = await authService.register({ name, email, password, role });
       successResponse(res, 201, "User registered successfully", user);
     } catch (err: any) {
+      console.error(err.message);
       errorResponse(res, 400, err.message);
     }
   },
@@ -18,9 +20,11 @@ export const authController = {
     try {
       const { email, password } = req.body;
       const result = await authService.login({ email, password });
-      successResponse(res, 200, "Login successful", result);
+
+      responses.ok(res, result, "Login successful")
     } catch (err: any) {
-      errorResponse(res, 400, err.message);
+      console.error("Failed to login", err);
+      handleControllerError(err, res);
     }
   },
 };
