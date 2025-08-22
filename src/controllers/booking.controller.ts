@@ -8,6 +8,24 @@ import { Response, Request } from 'express';
 
 
 export const bookingController = {
+    getMyBookings: async (req: Request, res: Response): Promise<void> => {
+        try {
+            const userId = req.user?.id;
+
+            if (!userId) {
+                responses.unauthorized(res, "Authentication required");
+                return;
+            }
+    
+            const booking = await bookingService.getMyBookings(userId);
+    
+            responses.ok(res, booking);  
+        } catch (err) {
+            console.error("Failed to create booking", err)
+            handleControllerError(err, res);
+        }
+    },
+
     create: async (req: Request, res: Response): Promise<void> => {
         try {
             const data : CreateBookingRequest = req.body;

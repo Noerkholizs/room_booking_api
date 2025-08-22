@@ -11,7 +11,7 @@ interface ApiResponse<T = any> {
 
 interface ApiErrorResponse extends Omit<ApiResponse, 'data'> {
   success: false;
-  error: {
+  errors: {
     code: string;
     details: any;
   }
@@ -78,7 +78,7 @@ export function errorResponse(
     statusCode,
     message,
     timestamp: new Date().toISOString(),
-    error: {
+    errors: {
       code: errorCode,
       ...(details && { details }),
     },

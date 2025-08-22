@@ -2,7 +2,6 @@ import z from "zod";
 import { BookingStatus } from "../../generated/prisma";
 import { CreateBookingSchema, UpdateBookingSchema } from "./booking.schema";
 
-// Request DTOs
 export type CreateBookingRequest = z.infer<typeof CreateBookingSchema>;
 export type UpdateBookingRequest = z.infer<typeof UpdateBookingSchema>;
 
@@ -14,7 +13,6 @@ export interface UpdateBookingService extends UpdateBookingRequest {
   userId: number;
 }
 
-// Response DTO
 export interface BookingResponseDto {
   id: number;
   roomId: number;

@@ -4,6 +4,21 @@ import { AppError, ConflictError, NotFoundError, ValidationError } from "@/error
 import { BookingResponseDto, CreateBookingService, UpdateBookingService } from "@/types/booking.dto";
 
 export const bookingService = {
+    getMyBookings: async (userId: number): Promise<BookingResponseDto[]> => {
+        const bookings = await prisma.booking.findMany({
+            where: {
+                userId: userId,
+                isDeleted: false
+            }
+        })
+
+        if (!bookings) {
+            throw new NotFoundError("Booking not found")
+        }
+
+        return bookings as BookingResponseDto[]
+    },
+
     create:  async ({ 
         userId, 
         roomId, 
@@ -60,17 +75,7 @@ export const bookingService = {
                 },
             });
     
-            return {
-                id: booking.id,
-                userId: booking.userId,
-                roomId: booking.roomId,
-                startTime: booking.startTime,
-                endTime: booking.endTime,
-                status: booking.status,
-                createdAt: booking.createdAt,
-                updatedAt: booking.updatedAt,
-                isDeleted: booking.isDeleted,
-            };
+            return booking as BookingResponseDto
         } catch (error) {
             if (error instanceof AppError) {
                 throw error;
@@ -139,17 +144,7 @@ export const bookingService = {
                 },
             });
     
-            return {
-                id: booking.id,
-                userId: booking.userId,
-                roomId: booking.roomId,
-                startTime: booking.startTime,
-                endTime: booking.endTime,
-                status: booking.status,
-                createdAt: booking.createdAt,
-                updatedAt: booking.updatedAt,
-                isDeleted: booking.isDeleted,
-            };
+            return booking as BookingResponseDto
         } catch (error) {
             if (error instanceof AppError) {
                 throw error;

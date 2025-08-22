@@ -13,6 +13,12 @@ router.post("/",
     bookingController.create
 );
 
+router.get("/my-bookings", 
+    checkAuth, 
+    requireRole("USER"), 
+    bookingController.getMyBookings
+);
+
 router.put("/update/:bookingId", 
     checkAuth, 
     requireRole("USER"), 
