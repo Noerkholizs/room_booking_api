@@ -9,15 +9,17 @@ import bookingRoutes from "@/routes/booking.routes";
 
 const app = express();
 
-app.use(cors({
-  origin: true,
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  }),
+);
 
 app.use(helmet());
 app.use(morgan("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
 
 // ✅ Routes
 app.use("/api/v1/auth", authRoutes);

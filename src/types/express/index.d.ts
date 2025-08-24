@@ -7,6 +7,7 @@ declare global {
         id: number;
         email: string;
         role: Role;
+        tokenVersion: number;
       };
     }
   }
