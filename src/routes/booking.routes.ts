@@ -5,6 +5,7 @@ import { validateRequest } from "@/utils/vadalidation";
 import {
   BookingParamsSchema,
   CreateBookingSchema,
+  BookingsQuerySchema,
   UpdateBookingSchema,
 } from "@/types/booking.schema";
 
@@ -22,6 +23,7 @@ router.get(
   "/my-bookings",
   verifyAccessToken,
   requireRole("USER"),
+  validateRequest({ query: BookingsQuerySchema }),
   bookingController.getMyBookings,
 );
 

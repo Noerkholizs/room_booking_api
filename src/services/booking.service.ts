@@ -9,26 +9,75 @@ import {
 import {
   BookingResponseDto,
   CreateBookingService,
+  BookingsQuery,
+  PaginatedBookingResponse,
   UpdateBookingService,
 } from "@/types/booking.dto";
 
 export const bookingService = {
-  getMyBookings: async (userId: number): Promise<BookingResponseDto[]> => {
-    const bookings = await prisma.booking.findMany({
-      where: {
-        userId: userId,
-        isDeleted: false,
-      },
-      include: {
-        room: true
-      }
-    });
+  getMyBookings: async (
+    userId: number,
+    filters: BookingsQuery
+  ): Promise<PaginatedBookingResponse> => {
+    const { status, search, page = 1, limit = 10 } = filters;
 
-    if (!bookings) {
-      throw new NotFoundError("Booking not found");
+    const whereClause: any = {
+      userId: userId,
+      isDeleted: false,
+    };
+
+    if (status && status !== 'ALL') {
+      whereClause.status = status;
     }
 
-    return bookings as BookingResponseDto[];
+    if (search && search.trim() !== '') {
+      whereClause.OR = [
+        {
+          room: {
+            name: {
+              contains: search.trim(),
+              lte: 'insensitive',
+            }
+          }
+        },
+        {
+          notes: {
+            contains: search.trim(),
+            lte: 'insensitive',
+          }
+        }
+      ];
+    }
+
+    const skip = (page - 1) * limit;
+
+    const total = await prisma.booking.count({
+      where: whereClause,
+    });
+
+    const bookings = await prisma.booking.findMany({
+      where: whereClause,
+      include: {
+        room: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip: skip,
+      take: limit,
+    });
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      data: bookings as BookingResponseDto[],
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages,
+      }
+    };
   },
 
   create: async ({

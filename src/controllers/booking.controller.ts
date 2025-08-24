@@ -3,6 +3,7 @@ import { errorResponse, responses, successResponse } from "@/response";
 import { bookingService } from "@/services/booking.service";
 import {
   CreateBookingRequest,
+  BookingsQuery,
   UpdateBookingRequest,
 } from "@/types/booking.dto";
 import { Response, Request } from "express";
@@ -17,9 +18,17 @@ export const bookingController = {
         return;
       }
 
-      const booking = await bookingService.getMyBookings(userId);
+      const queryParams = req.validatedQuery || req.query;
+      const { status, search, page = 1, limit = 10 } = queryParams as BookingsQuery;
 
-      responses.ok(res, booking);
+      const result = await bookingService.getMyBookings(userId, {
+        status,
+        search,
+        page,
+        limit,
+      });
+
+      responses.ok(res, result.data);
     } catch (err) {
       console.error("Failed to create booking", err);
       handleControllerError(err, res);

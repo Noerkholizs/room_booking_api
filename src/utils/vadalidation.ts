@@ -9,7 +9,6 @@ export const validateRequest =
       if (schemas.body) {
         const bodyResult = schemas.body.safeParse(req.body);
 
-        console.log("Body result", bodyResult);
         if (!bodyResult.success) {
           responses.validationError(
             res,
@@ -33,7 +32,7 @@ export const validateRequest =
           return;
         }
 
-        req.query = queryResult.data as any;
+        req.validatedQuery = queryResult.data;
       }
 
       if (schemas.params) {

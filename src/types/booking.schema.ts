@@ -16,6 +16,17 @@ export const UpdateBookingSchema = z.object({
   notes: z.string().max(255).optional(),
 });
 
+export const BookingsQuerySchema = z.object({
+  status: z.enum(["SUBMIT", "APPROVED", "REJECTED", "ALL"]).optional(),
+  search: z.string().optional(),
+  page: z.string().transform(Number).optional(),
+  limit: z.string().transform(Number).optional(),
+});
+
+export const AdminUpdateBookingSchema = z.object({
+  status: z.enum(["APPROVED", "REJECTED"]),
+});
+
 export const BookingParamsSchema = z.object({
   bookingId: z.string().min(1, "Booking ID is required"),
 });

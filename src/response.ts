@@ -47,6 +47,7 @@ export function successResponse<T = any>(
   statusCode: number = HTTP_STATUS.OK,
   message: string = "Success",
   data?: T,
+  pagination?: T,
   options?: { path: string },
 ): Response<ApiResponse<T>> {
   const response: ApiResponse<T> = {
@@ -55,6 +56,7 @@ export function successResponse<T = any>(
     message,
     timestamp: new Date().toISOString(),
     ...(options?.path && { path: options.path }),
+    ...(pagination && { pagination: pagination }),
   };
 
   if (data !== null && data !== undefined) {
@@ -98,8 +100,8 @@ export function errorResponse(
 
 export const responses = {
   // Success responses
-  ok: <T>(res: Response, data?: T, message: string = "Success") =>
-    successResponse(res, HTTP_STATUS.OK, message, data),
+  ok: <T>(res: Response, data?: T, message: string = "Success", pagination?: T) =>
+    successResponse(res, HTTP_STATUS.OK, message, data, pagination),
 
   created: <T>(
     res: Response,

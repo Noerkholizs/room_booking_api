@@ -3,40 +3,37 @@ import { PrismaClient } from "../generated/prisma";
 const prisma = new PrismaClient();
 
 async function main() {
-  // Clear old data (optional, for development only)
   await prisma.booking.deleteMany();
   await prisma.room.deleteMany();
   await prisma.user.deleteMany();
 
-  // Users
   const admin = await prisma.user.create({
     data: {
       email: "admin@example.com",
       name: "Admin User",
-      password: "hashedpassword123", // 🔒 replace with bcrypt in real app
+      password: "$2b$10$Y8rDtPEmcoDZorJr1elmoOU5nqKjHlqXPakfD5rW9apt4QOiYhQNG",
       role: "ADMIN",
     },
   });
 
   const user1 = await prisma.user.create({
     data: {
-      email: "john@example.com",
-      name: "John Doe",
-      password: "hashedpassword123",
+      email: "syaiful@example.com",
+      name: "syaiful",
+      password: "$2b$10$Y8rDtPEmcoDZorJr1elmoOU5nqKjHlqXPakfD5rW9apt4QOiYhQNG",
       role: "USER",
     },
   });
 
   const user2 = await prisma.user.create({
     data: {
-      email: "jane@example.com",
-      name: "Jane Smith",
-      password: "hashedpassword123",
+      email: "nurkholis@example.com",
+      name: "Nurkholis",
+      password: "$2b$10$Y8rDtPEmcoDZorJr1elmoOU5nqKjHlqXPakfD5rW9apt4QOiYhQNG",
       role: "USER",
     },
   });
 
-  // Rooms
   const roomA = await prisma.room.create({
     data: {
       name: "Meeting Room A",
@@ -52,8 +49,15 @@ async function main() {
       capacity: 6,
     },
   });
+  
+  const roomC = await prisma.room.create({
+    data: {
+      name: "ClassRoom",
+      description: "Large meeting room with projector",
+      capacity: 12,
+    },
+  });
 
-  // Bookings
   await prisma.booking.create({
     data: {
       startTime: new Date("2025-08-21T09:00:00Z"),
